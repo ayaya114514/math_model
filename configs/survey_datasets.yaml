@@ -1,0 +1,14 @@
+# 阶段 2：候选数据集抽样调研（只通过 datasets-server 读少量行，不下载全集）
+seed: 42
+tokenizer: mlx-community/Qwen2.5-1.5B-Instruct-bf16
+num_offsets: 5      # 随机取 5 个位置
+per_offset: 100     # 每个位置连续取 100 行（接口单次上限）
+
+datasets:
+  - {name: openr1,        repo: open-r1/OpenR1-Math-220k,        config: default, split: train,    num_rows: 93733}
+  - {name: openthoughts3, repo: open-thoughts/OpenThoughts3-1.2M, config: default, split: train,    num_rows: 850000, domain_filter: math}   # 只统计 domain=math 的行；抽样数见报告
+  - {name: numina_cot,    repo: AI-MO/NuminaMath-CoT,            config: default, split: train,    num_rows: 859494}
+  - {name: omi2,          repo: nvidia/OpenMathInstruct-2,       config: default, split: train_1M, num_rows: 1000000}
+  - {name: omr,           repo: nvidia/OpenMathReasoning,        config: default, split: cot,      num_rows: 3201061}
+  - {name: nemotron_v4,   repo: nvidia/Nemotron-SFT-Math-v4,     config: default, split: train,    num_rows: 545431}
+  - {name: metamath,      repo: meta-math/MetaMathQA,            config: default, split: train,    num_rows: 395000}

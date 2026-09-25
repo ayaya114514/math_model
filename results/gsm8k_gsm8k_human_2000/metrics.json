@@ -1,0 +1,25 @@
+{
+  "run_name": "gsm8k_gsm8k_human_2000",
+  "model": "mlx-community/Qwen2.5-1.5B-Instruct-bf16",
+  "adapter_path": "adapters/gsm8k_human_2000",
+  "data": "data/raw/gsm8k_test.jsonl",
+  "n": 1319,
+  "strict_acc": 0.5754359363153905,
+  "lenient_acc": 0.5754359363153905,
+  "boxed_rate": 0.9954510993176648,
+  "truncated_rate": 0.004548900682335102,
+  "mean_gen_tokens": 99.1516300227445,
+  "elapsed_s_this_session": 507.6352660420016,
+  "config": {
+    "run_name": "gsm8k_gsm8k_human_2000",
+    "seed": 42,
+    "model": "mlx-community/Qwen2.5-1.5B-Instruct-bf16",
+    "adapter_path": "adapters/gsm8k_human_2000",
+    "data": "data/raw/gsm8k_test.jsonl",
+    "limit": null,
+    "system_prompt": "Please reason step by step, and put your final answer within \\boxed{}.",
+    "max_tokens": 1024,
+    "batch_size": 64,
+    "chunk_size": 64
+  }
+}

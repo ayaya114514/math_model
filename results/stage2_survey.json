@@ -1,0 +1,286 @@
+{
+  "openr1": {
+    "repo": "open-r1/OpenR1-Math-220k",
+    "config": "default",
+    "split": "train",
+    "sampled": 500,
+    "tokens_mean": 5835.042,
+    "tokens_p50": 4780,
+    "tokens_p90": 11625,
+    "tokens_max": 18273,
+    "frac_le_1024": 0.014,
+    "frac_le_2048": 0.124,
+    "frac_le_4096": 0.418,
+    "has_gold_field": 1.0,
+    "boxed_rate": 1.0,
+    "think_tag_rate": 1.0,
+    "extra": {
+      "verified_any": 0.67
+    },
+    "top_sources": [
+      [
+        "olympiads",
+        361
+      ],
+      [
+        "cn_contest",
+        63
+      ],
+      [
+        "aops_forum",
+        51
+      ],
+      [
+        "amc_aime",
+        13
+      ],
+      [
+        "inequalities",
+        7
+      ],
+      [
+        "number_theory",
+        4
+      ],
+      [
+        "olympiads_ref",
+        1
+      ]
+    ],
+    "example_head": "<think>\nOkay, so I need to find the number of natural numbers where each digit is either 1 or 2, and the sum of the digits is exactly n. Hmm, let's see. Let me start by understanding the problem properly.\n\nFirst, a natural number can have any number of digits, right? But in this case, since all digits are 1 or 2, each digit contributes at least 1 to the total sum. So, the minimum sum for a number with k digits would be k (if all digits are 1), and the maximum would be 2k (if all digits are 2). Therefore, for a given n, the number must have between ceiling(n/2) and n digits. Wait, let me check "
+  },
+  "openthoughts3": {
+    "repo": "open-thoughts/OpenThoughts3-1.2M",
+    "config": "default",
+    "split": "train",
+    "sampled": 300,
+    "tokens_mean": 15588.86,
+    "tokens_p50": 16699,
+    "tokens_p90": 16752,
+    "tokens_max": 16777,
+    "frac_le_1024": 0.0,
+    "frac_le_2048": 0.0,
+    "frac_le_4096": 0.0,
+    "has_gold_field": 0.0,
+    "boxed_rate": 0.37333333333333335,
+    "think_tag_rate": 1.0,
+    "extra": {},
+    "top_sources": [
+      [
+        "math/ai2-adapt-dev/openmath-2-math",
+        300
+      ]
+    ],
+    "example_head": "<think> Okay, so I have this geometry problem here about triangle MNO. The altitudes MH and NK intersect at point G. They give me three angles: angle GMH is 40 degrees, angle GNK is 35 degrees, and angle GKN is 20 degrees. I need to find the ratio GN over GH. Hmm, okay, let me start by drawing a rough sketch of the triangle and labeling all the given information. Maybe that will help me visualize it better.\n\nFirst, let me recall that in any triangle, the altitudes intersect at the orthocenter. So point G is the orthocenter of triangle MNO. That means all three altitudes meet at G, right? But t"
+  },
+  "numina_cot": {
+    "repo": "AI-MO/NuminaMath-CoT",
+    "config": "default",
+    "split": "train",
+    "sampled": 500,
+    "tokens_mean": 427.31,
+    "tokens_p50": 354,
+    "tokens_p90": 852,
+    "tokens_max": 2016,
+    "frac_le_1024": 0.952,
+    "frac_le_2048": 1.0,
+    "frac_le_4096": 1.0,
+    "has_gold_field": 0.0,
+    "boxed_rate": 0.972,
+    "think_tag_rate": 0.0,
+    "extra": {},
+    "top_sources": [
+      [
+        "cn_k12",
+        145
+      ],
+      [
+        "orca_math",
+        106
+      ],
+      [
+        "synthetic_math",
+        94
+      ],
+      [
+        "olympiads",
+        88
+      ],
+      [
+        "synthetic_amc",
+        40
+      ],
+      [
+        "aops_forum",
+        19
+      ],
+      [
+        "gsm8k",
+        5
+      ],
+      [
+        "amc_aime",
+        2
+      ]
+    ],
+    "example_head": "1. **Dimensions of the smaller rectangle:**\n   Let the width of the smaller rectangle be $w$ and the length be $2w$. Given the perimeter $6$ cm:\n   \\[\n   2(w + 2w) = 6 \\rightarrow 6w = 6 \\rightarrow w = 1 \\text{ cm}, \\quad 2w = 2 \\text{ cm}\n   \\]\n\n2. **Dimensions of the larger rectangle:**\n   Given the dimensions are three times and two times those of the smaller rectangle, respectively:\n   \\[\n   \\text{Width} = 3w = 3 \\times 1 = 3 \\text{ cm}, \\quad \\text{Length} = 2 \\times 2w = 2 \\times 2 = 4 \\text{ cm}\n   \\]\n   Confirming the area:\n   \\[\n   \\text{Area} = 3 \\times 4 = 12 \\text{ cm}^2\n   \\]\n\n3."
+  },
+  "omi2": {
+    "repo": "nvidia/OpenMathInstruct-2",
+    "config": "default",
+    "split": "train_1M",
+    "sampled": 500,
+    "tokens_mean": 391.246,
+    "tokens_p50": 333,
+    "tokens_p90": 784,
+    "tokens_max": 1189,
+    "frac_le_1024": 0.99,
+    "frac_le_2048": 1.0,
+    "frac_le_4096": 1.0,
+    "has_gold_field": 0.998,
+    "boxed_rate": 1.0,
+    "think_tag_rate": 0.0,
+    "extra": {},
+    "top_sources": [
+      [
+        "augmented_math",
+        419
+      ],
+      [
+        "augmented_gsm8k",
+        70
+      ],
+      [
+        "math",
+        7
+      ],
+      [
+        "gsm8k",
+        4
+      ]
+    ],
+    "example_head": "To determine the ratio $AR/RB$, we need to use the given information about the triangle $ABC$ and the circumradius $R$.\n\nGiven that $\\angle C = 90^\\circ$ and $AC/BC = 3/4$, we can deduce some properties of the triangle.\n\n1. Since $\\angle C = 90^\\circ$, triangle $ABC$ is a right-angled triangle.\n\n2. The ratio $AC/BC = 3/4$ tells us about the proportions of the sides. We can express the sides as $AC = 3x$ and $BC = 4x$ for some $x$.\n\n3. The circumradius $R$ is the radius of the circumcircle that passes through the three vertices of the triangle. In a right-angled triangle, the circumcenter (the "
+  },
+  "omr": {
+    "repo": "nvidia/OpenMathReasoning",
+    "config": "default",
+    "split": "cot",
+    "sampled": 500,
+    "tokens_mean": 7785.448,
+    "tokens_p50": 6834,
+    "tokens_p90": 14319,
+    "tokens_max": 21960,
+    "frac_le_1024": 0.006,
+    "frac_le_2048": 0.08,
+    "frac_le_4096": 0.266,
+    "has_gold_field": 0.998,
+    "boxed_rate": 0.998,
+    "think_tag_rate": 1.0,
+    "extra": {},
+    "top_sources": [
+      [
+        "aops_c6_high_school_olympiads",
+        253
+      ],
+      [
+        "aops_c4_high_school_math",
+        118
+      ],
+      [
+        "aops_c7_college_math",
+        97
+      ],
+      [
+        "MATH_training_set",
+        21
+      ],
+      [
+        "aops_c5_contests_amp_programs",
+        11
+      ]
+    ],
+    "example_head": "<think>\nOkay, let's see. I need to find the number of sequences of 19 letters from the set X = {A, B, C, D, E, F, G, H, I}. The conditions are that each sequence must contain an odd number of Ds and an even number of Hs. Each letter can be used any number of times, right? Because the problem says \"each order of the letters makes a new sequence,\" so I assume repetition is allowed.\n\nSo, first, I should figure out how to model this problem. It sounds like a combinatorics question with restrictions on the counts of certain elements. The standard approach for such problems is to use generating func"
+  },
+  "nemotron_v4": {
+    "repo": "nvidia/Nemotron-SFT-Math-v4",
+    "config": "default",
+    "split": "train",
+    "sampled": 500,
+    "tokens_mean": 16044.794,
+    "tokens_p50": 6560,
+    "tokens_p90": 41989,
+    "tokens_max": 136617,
+    "frac_le_1024": 0.044,
+    "frac_le_2048": 0.162,
+    "frac_le_4096": 0.38,
+    "has_gold_field": 1.0,
+    "boxed_rate": 1.0,
+    "think_tag_rate": 0.0,
+    "extra": {
+      "has_reasoning_field": 1.0
+    },
+    "top_sources": [
+      [
+        "Math StackExchange",
+        300
+      ],
+      [
+        "AoPS",
+        200
+      ]
+    ],
+    "example_head": "We need to find all real numbers a such that for all natural numbers x (presumably x ∈ ℕ = {1, 2, 3, ...} or maybe ℕ includes 0? Usually ℕ means positive integers, sometimes nonnegative. We need to check domain. The problem says \"for all x ∈ ℕ\", I'll assume ℕ = {0,1,2,...} or {1,2,...}? Often ℕ = natural numbers = {1,2,3,...} in some contexts, but it might not matter much. We must find all a such that floor(sqrt(x+a) + 1/2) = floor(sqrt(x) + 1/2) for all natural x.\n\nWe need to analyze the function f(t) = floor(sqrt(t) + 1/2). This function yields the integer nearest to sqrt(t), with a specific"
+  },
+  "metamath": {
+    "repo": "meta-math/MetaMathQA",
+    "config": "default",
+    "split": "train",
+    "sampled": 500,
+    "tokens_mean": 183.732,
+    "tokens_p50": 151,
+    "tokens_p90": 323,
+    "tokens_max": 879,
+    "frac_le_1024": 1.0,
+    "frac_le_2048": 1.0,
+    "frac_le_4096": 1.0,
+    "has_gold_field": 0.0,
+    "boxed_rate": 0.31,
+    "think_tag_rate": 0.0,
+    "extra": {},
+    "top_sources": [
+      [
+        "GSM_AnsAug",
+        109
+      ],
+      [
+        "MATH_AnsAug",
+        101
+      ],
+      [
+        "GSM_Rephrased",
+        95
+      ],
+      [
+        "MATH_Rephrased",
+        58
+      ],
+      [
+        "GSM_FOBAR",
+        55
+      ],
+      [
+        "GSM_SV",
+        51
+      ],
+      [
+        "MATH_FOBAR",
+        18
+      ],
+      [
+        "MATH_SV",
+        13
+      ]
+    ],
+    "example_head": "Dividing 7 by 9, we get 0.777777...\nRounding this to 2 decimal places, we get $\\boxed{0.78}$.The answer is: 0.78"
+  }
+}

@@ -1,0 +1,22 @@
+# 阶段 0 补测：bf16 更大 batch，题目更多，估算更稳
+seed: 42
+output: stage0_speed_bs64.json
+
+models:
+  bf16: mlx-community/Qwen2.5-1.5B-Instruct-bf16
+
+dataset: openai/gsm8k
+dataset_config: main
+split: train
+
+system_prompt: "Please reason step by step, and put your final answer within \\boxed{}."
+max_tokens: 1024
+
+single:
+  num_questions: 1         # 本次只关心 batch，逐题只跑 1 条
+
+batch:
+  num_questions: 128
+  batch_sizes: [32, 64]
+
+eval_target_size: 1319

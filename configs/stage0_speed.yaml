@@ -1,0 +1,25 @@
+# 阶段 0：学生模型生成速度测试
+seed: 42
+
+models:
+  bf16: mlx-community/Qwen2.5-1.5B-Instruct-bf16
+  4bit: mlx-community/Qwen2.5-1.5B-Instruct-4bit
+
+# 测速题目取自 GSM8K train split（不碰 test split）
+dataset: openai/gsm8k
+dataset_config: main
+split: train
+
+# Qwen 官方推荐的数学 prompt；阶段 1 评测沿用同一句
+system_prompt: "Please reason step by step, and put your final answer within \\boxed{}."
+
+max_tokens: 1024   # greedy 解码
+
+single:
+  num_questions: 20        # 逐题生成（batch=1）
+
+batch:
+  num_questions: 64
+  batch_sizes: [8, 16, 32]
+
+eval_target_size: 1319     # GSM8K test 题数，用于估算评测耗时

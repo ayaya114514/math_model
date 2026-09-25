@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+.DS_Store
+# 数据体积大且可由脚本重新生成，不入库
+data/
+# LoRA 权重
+adapters/

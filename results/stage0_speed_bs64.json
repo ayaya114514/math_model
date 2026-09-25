@@ -1,0 +1,69 @@
+{
+  "config": {
+    "seed": 42,
+    "output": "stage0_speed_bs64.json",
+    "models": {
+      "bf16": "mlx-community/Qwen2.5-1.5B-Instruct-bf16"
+    },
+    "dataset": "openai/gsm8k",
+    "dataset_config": "main",
+    "split": "train",
+    "system_prompt": "Please reason step by step, and put your final answer within \\boxed{}.",
+    "max_tokens": 1024,
+    "single": {
+      "num_questions": 1
+    },
+    "batch": {
+      "num_questions": 128,
+      "batch_sizes": [
+        32,
+        64
+      ]
+    },
+    "eval_target_size": 1319
+  },
+  "models": {
+    "bf16": {
+      "repo": "mlx-community/Qwen2.5-1.5B-Instruct-bf16",
+      "load_s": 0.9519465420016786,
+      "single": {
+        "num_questions": 1,
+        "mean_prompt_tokens": 86.0,
+        "mean_gen_tokens": 394.0,
+        "max_gen_tokens": 394,
+        "mean_gen_tps": 39.5801023291431,
+        "mean_prompt_tps": 733.8922366351626,
+        "truncated": 0,
+        "has_boxed_rate": 1.0,
+        "peak_memory_gb": 3.228675624,
+        "est_eval_min": 218.83302022076532
+      },
+      "batch": [
+        {
+          "batch_size": 32,
+          "num_questions": 128,
+          "wall_s": 235.73699858300097,
+          "gen_tokens": 37335,
+          "gen_tps": 173.2576537694978,
+          "prompt_tps": 560.0789953886397,
+          "questions_per_s": 0.5429779829615176,
+          "peak_memory_gb": 7.874786908,
+          "has_boxed_rate": 0.9296875,
+          "est_eval_min": 40.4866017097628
+        },
+        {
+          "batch_size": 64,
+          "num_questions": 128,
+          "wall_s": 156.14719762500317,
+          "gen_tokens": 37858,
+          "gen_tps": 272.9399825586668,
+          "prompt_tps": 649.940528365647,
+          "questions_per_s": 0.8197393353635436,
+          "peak_memory_gb": 10.539922777,
+          "has_boxed_rate": 0.9375,
+          "est_eval_min": 26.81746792544
+        }
+      ]
+    }
+  }
+}

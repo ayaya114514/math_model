@@ -1,0 +1,136 @@
+{
+  "config": {
+    "seed": 42,
+    "models": {
+      "bf16": "mlx-community/Qwen2.5-1.5B-Instruct-bf16",
+      "4bit": "mlx-community/Qwen2.5-1.5B-Instruct-4bit"
+    },
+    "dataset": "openai/gsm8k",
+    "dataset_config": "main",
+    "split": "train",
+    "system_prompt": "Please reason step by step, and put your final answer within \\boxed{}.",
+    "max_tokens": 1024,
+    "single": {
+      "num_questions": 20
+    },
+    "batch": {
+      "num_questions": 64,
+      "batch_sizes": [
+        8,
+        16,
+        32
+      ]
+    },
+    "eval_target_size": 1319
+  },
+  "models": {
+    "bf16": {
+      "repo": "mlx-community/Qwen2.5-1.5B-Instruct-bf16",
+      "load_s": 1.3642171669998788,
+      "single": {
+        "num_questions": 20,
+        "mean_prompt_tokens": 82.9,
+        "mean_gen_tokens": 283.65,
+        "max_gen_tokens": 402,
+        "mean_gen_tps": 40.85392481738747,
+        "mean_prompt_tps": 664.2651842670599,
+        "truncated": 0,
+        "has_boxed_rate": 0.9,
+        "peak_memory_gb": 3.312660388,
+        "est_eval_min": 152.63092904469568
+      },
+      "batch": [
+        {
+          "batch_size": 8,
+          "num_questions": 64,
+          "wall_s": 334.308787957998,
+          "gen_tokens": 18847,
+          "gen_tps": 58.325570786302265,
+          "prompt_tps": 493.1577994014839,
+          "questions_per_s": 0.19143977755092953,
+          "peak_memory_gb": 5.834278991,
+          "has_boxed_rate": 0.9375,
+          "est_eval_min": 114.8315862803644
+        },
+        {
+          "batch_size": 16,
+          "num_questions": 64,
+          "wall_s": 186.81837145899772,
+          "gen_tokens": 18876,
+          "gen_tps": 107.01254853967609,
+          "prompt_tps": 528.6572832981467,
+          "questions_per_s": 0.3425787276710444,
+          "peak_memory_gb": 6.802325125,
+          "has_boxed_rate": 0.921875,
+          "est_eval_min": 64.17016457146302
+        },
+        {
+          "batch_size": 32,
+          "num_questions": 64,
+          "wall_s": 115.01487254200038,
+          "gen_tokens": 18869,
+          "gen_tps": 177.33885574276405,
+          "prompt_tps": 642.2087714163423,
+          "questions_per_s": 0.5564497754551604,
+          "peak_memory_gb": 7.461276055,
+          "has_boxed_rate": 0.921875,
+          "est_eval_min": 39.50641064658815
+        }
+      ]
+    },
+    "4bit": {
+      "repo": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+      "load_s": 1.3786860409963992,
+      "single": {
+        "num_questions": 20,
+        "mean_prompt_tokens": 82.9,
+        "mean_gen_tokens": 253.0,
+        "max_gen_tokens": 388,
+        "mean_gen_tps": 123.35734333442747,
+        "mean_prompt_tps": 963.8400953508084,
+        "truncated": 0,
+        "has_boxed_rate": 0.75,
+        "peak_memory_gb": 1.196322892,
+        "est_eval_min": 45.086763244042
+      },
+      "batch": [
+        {
+          "batch_size": 8,
+          "num_questions": 64,
+          "wall_s": 106.2200484999994,
+          "gen_tokens": 18485,
+          "gen_tps": 184.194171298697,
+          "prompt_tps": 940.1792508259836,
+          "questions_per_s": 0.6025227902244873,
+          "peak_memory_gb": 1.871638999,
+          "has_boxed_rate": 0.78125,
+          "est_eval_min": 36.485480200911255
+        },
+        {
+          "batch_size": 16,
+          "num_questions": 64,
+          "wall_s": 59.51501533299597,
+          "gen_tokens": 18486,
+          "gen_tps": 345.9389834534715,
+          "prompt_tps": 906.7443042147315,
+          "questions_per_s": 1.075358876107312,
+          "peak_memory_gb": 2.769573699,
+          "has_boxed_rate": 0.78125,
+          "est_eval_min": 20.442787818807734
+        },
+        {
+          "batch_size": 32,
+          "num_questions": 64,
+          "wall_s": 44.23271237500012,
+          "gen_tokens": 18500,
+          "gen_tps": 483.32623681288754,
+          "prompt_tps": 929.3788111924939,
+          "questions_per_s": 1.4468929569006523,
+          "peak_memory_gb": 4.242685377,
+          "has_boxed_rate": 0.78125,
+          "est_eval_min": 15.193475943391968
+        }
+      ]
+    }
+  }
+}

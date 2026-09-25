@@ -1,0 +1,29 @@
+# 阶段 4 smoke test：小数据、少步数，确认 loss 下降、内存不爆、权重能保存/加载
+run_name: smoke_omi2_500
+seed: 42
+base_model: mlx-community/Qwen2.5-1.5B-Instruct-bf16
+train_file: data/filtered/omi2_gsm/train_500.jsonl
+valid_file: data/filtered/omi2_gsm/valid.jsonl
+decontam_config: configs/decontam.yaml
+system_prompt: "Please reason step by step, and put your final answer within \\boxed{}."   # 与评测一致
+
+iters: 100            # smoke 固定步数；正式训练改用 epochs
+epochs: null
+warmup_ratio: 0.05    # 前 5% 的参数更新线性 warmup
+min_lr_ratio: 0.1     # cosine 衰减到 lr 的 10%
+
+mlx:                  # 原样传给 mlx_lm.lora
+  fine_tune_type: lora
+  optimizer: adamw
+  num_layers: -1      # 全部 28 层都加 LoRA
+  lora_parameters: {rank: 16, scale: 20.0, dropout: 0.05}
+  batch_size: 2       # batch 4 无梯度检查点时 OOM（见 EXPERIMENTS.md）
+  grad_accumulation_steps: 8   # 等效 batch 16
+  learning_rate: 2.0e-5
+  mask_prompt: true   # loss 只算回答部分
+  max_seq_length: 1024
+  grad_checkpoint: true
+  steps_per_report: 5
+  steps_per_eval: 25
+  val_batches: -1     # 用全部 200 条验证
+  save_every: 50

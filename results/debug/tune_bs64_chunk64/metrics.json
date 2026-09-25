@@ -1,0 +1,25 @@
+{
+  "run_name": "tune_bs64_chunk64",
+  "model": "mlx-community/Qwen2.5-1.5B-Instruct-bf16",
+  "adapter_path": null,
+  "data": "data/raw/gsm8k_test.jsonl",
+  "n": 256,
+  "strict_acc": 0.69140625,
+  "lenient_acc": 0.73046875,
+  "boxed_rate": 0.9296875,
+  "truncated_rate": 0.0078125,
+  "mean_gen_tokens": 308.17578125,
+  "elapsed_s_this_session": 164.66073775000405,
+  "config": {
+    "run_name": "tune_bs64_chunk64",
+    "seed": 42,
+    "model": "mlx-community/Qwen2.5-1.5B-Instruct-bf16",
+    "adapter_path": null,
+    "data": "data/raw/gsm8k_test.jsonl",
+    "limit": 256,
+    "system_prompt": "Please reason step by step, and put your final answer within \\boxed{}.",
+    "max_tokens": 1024,
+    "batch_size": 64,
+    "chunk_size": 64
+  }
+}

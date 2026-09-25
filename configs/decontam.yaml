@@ -1,0 +1,12 @@
+# 阶段 2：训练数据与测试集去重
+test_sets:
+  - data/raw/gsm8k_test.jsonl
+  - data/raw/math_test.jsonl      # MATH 完整 test（5000 题，MATH-500 是其子集）
+input_dir: data/raw/converted
+datasets: [gsm8k_human, omi2, metamath, numina, openr1]
+ngram: 8            # 词级 8-gram
+# 训练题覆盖某道测试题 >= 阈值比例的 8-gram 即删除；阈值依据 --scan 样例人工确认（见 results/stage2_decontam.md）
+thresholds:
+  gsm8k: 0.2        # 叙事应用题：>=0.2 基本都是同一故事模板换数字/人名；主评测集，宁严勿松
+  math: 0.5         # MATH 套话多（"Express your answer as a common fraction"），0.3 误删太多
+examples_per_bin: 8

@@ -1,0 +1,141 @@
+{
+  "omi2_gsm": {
+    "drops": {
+      "seen": 464,
+      "duplicate_question": 1,
+      "too_long": 0
+    },
+    "unique_before_len_filter": 463,
+    "pool": 463,
+    "outputs": {
+      "valid": 200
+    },
+    "total_tokens_all": {
+      "p50": 242,
+      "p90": 349,
+      "p99": 529,
+      "max": 699,
+      "frac_le_1024": 1.0,
+      "frac_le_2048": 1.0
+    },
+    "response_tokens_pool": {
+      "mean": 168.11663066954642,
+      "p50": 156,
+      "p90": 253,
+      "p99": 399,
+      "max": 571
+    }
+  },
+  "metamath_gsm": {
+    "drops": {
+      "seen": 1221,
+      "duplicate_question": 13,
+      "too_long": 0
+    },
+    "unique_before_len_filter": 1208,
+    "pool": 1208,
+    "outputs": {
+      "valid": 200,
+      "train_500": 500
+    },
+    "total_tokens_all": {
+      "p50": 204,
+      "p90": 293,
+      "p99": 374,
+      "max": 538,
+      "frac_le_1024": 1.0,
+      "frac_le_2048": 1.0
+    },
+    "response_tokens_pool": {
+      "mean": 129.14403973509934,
+      "p50": 121,
+      "p90": 193,
+      "p99": 270,
+      "max": 389
+    }
+  },
+  "gsm8k_human": {
+    "drops": {
+      "seen": 3000,
+      "too_long": 0
+    },
+    "unique_before_len_filter": 3000,
+    "pool": 3000,
+    "outputs": {
+      "valid": 200,
+      "train_500": 500,
+      "train_2000": 2000
+    },
+    "total_tokens_all": {
+      "p50": 171,
+      "p90": 256,
+      "p99": 357,
+      "max": 459,
+      "frac_le_1024": 1.0,
+      "frac_le_2048": 1.0
+    },
+    "response_tokens_pool": {
+      "mean": 95.11366666666666,
+      "p50": 87,
+      "p90": 149,
+      "p99": 228,
+      "max": 348
+    }
+  },
+  "numina_orca": {
+    "drops": {
+      "seen": 541,
+      "too_long": 0
+    },
+    "unique_before_len_filter": 541,
+    "pool": 541,
+    "outputs": {
+      "valid": 200
+    },
+    "total_tokens_all": {
+      "p50": 343,
+      "p90": 566,
+      "p99": 868,
+      "max": 1111,
+      "frac_le_1024": 0.9963031423290203,
+      "frac_le_2048": 1.0
+    },
+    "response_tokens_pool": {
+      "mean": 275.53789279112755,
+      "p50": 254,
+      "p90": 462,
+      "p99": 694,
+      "max": 869
+    }
+  },
+  "openr1": {
+    "drops": {
+      "seen": 3000,
+      "multiple_distinct_boxed": 184,
+      "answer_mismatch": 923,
+      "no_final_answer": 23,
+      "no_or_broken_boxed": 6,
+      "too_long": 1663
+    },
+    "unique_before_len_filter": 1864,
+    "pool": 201,
+    "outputs": {
+      "valid": 200
+    },
+    "total_tokens_all": {
+      "p50": 4884,
+      "p90": 11638,
+      "p99": 16753,
+      "max": 18875,
+      "frac_le_1024": 0.005901287553648069,
+      "frac_le_2048": 0.10783261802575107
+    },
+    "response_tokens_pool": {
+      "mean": 1494.915422885572,
+      "p50": 1572,
+      "p90": 1861,
+      "p99": 1954,
+      "max": 1969
+    }
+  }
+}

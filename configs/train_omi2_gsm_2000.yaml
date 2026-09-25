@@ -1,0 +1,30 @@
+# 阶段 4 正式训练：主数据 omi2_gsm，2000 条，2 epoch
+# 超参来自 smoke test（configs/train_smoke.yaml），吞吐/内存取舍见 EXPERIMENTS.md
+run_name: omi2_gsm_2000
+seed: 42
+base_model: mlx-community/Qwen2.5-1.5B-Instruct-bf16
+train_file: data/filtered/omi2_gsm/train_2000.jsonl
+valid_file: data/filtered/omi2_gsm/valid.jsonl
+decontam_config: configs/decontam.yaml
+system_prompt: "Please reason step by step, and put your final answer within \\boxed{}."   # 与评测一致
+
+iters: null
+epochs: 2
+warmup_ratio: 0.05    # 前 5% 的参数更新线性 warmup
+min_lr_ratio: 0.1     # cosine 衰减到 lr 的 10%
+
+mlx:                  # 原样传给 mlx_lm.lora
+  fine_tune_type: lora
+  optimizer: adamw
+  num_layers: -1      # 全部 28 层都加 LoRA
+  lora_parameters: {rank: 16, scale: 20.0, dropout: 0.05}
+  batch_size: 2       # bs4 无检查点 OOM；bs4+检查点不提速；bs2 无检查点快 27% 但峰值 12.4GB 贴近上限
+  grad_accumulation_steps: 8   # 等效 batch 16
+  learning_rate: 2.0e-5
+  mask_prompt: true   # loss 只算回答部分（已验证 mask 边界）
+  max_seq_length: 1024
+  grad_checkpoint: true        # 峰值约 6.8 GB
+  steps_per_report: 20
+  steps_per_eval: 200
+  val_batches: -1     # 全部 200 条验证
+  save_every: 500

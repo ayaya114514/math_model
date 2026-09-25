@@ -1,0 +1,41 @@
+# 阶段 3：筛选与抽样
+seed: 42
+tokenizer: mlx-community/Qwen2.5-1.5B-Instruct-bf16
+# 训练 prompt 与评测完全一致（见 configs/eval_gsm8k_baseline.yaml）
+system_prompt: "Please reason step by step, and put your final answer within \\boxed{}."
+
+# 单条样本（chat 模板下 prompt + 回答 + 结束符）的 token 上限，超过则丢弃；各臂可覆盖。依据见 results/stage3_filter.md
+# 1024 = 评测 max_tokens：不教学生写评测时会被截断的长回答，也限制训练内存
+max_total_tokens: 1024
+
+valid_size: 200          # 每个数据臂留出的验证集（与所有训练子集不相交）
+decontam_config: configs/decontam.yaml   # 输出前再按同一标准断言一次无测试集污染
+
+# 每个"数据臂"对应阶段 5 的一组对照；训练子集嵌套：500 ⊂ 2000 ⊂ 10000
+arms:
+  omi2_gsm:          # 主数据：Llama-3.1-405B，GSM8K 改写题
+    dataset: omi2
+    sources: [augmented_gsm8k, gsm8k]
+    verify: numeric
+    sizes: [500, 2000, 10000]
+  metamath_gsm:      # 对照：GPT-3.5，GSM8K 改写题（只取答案可回查的 AnsAug / Rephrased）
+    dataset: metamath
+    sources: [GSM_AnsAug, GSM_Rephrased]
+    verify: numeric
+    sizes: [500, 2000, 10000]
+  gsm8k_human:       # 对照：人工解答（去重后 7469 条，最大只能到 7000）
+    dataset: gsm8k_human
+    sources: [gsm8k_train]
+    verify: numeric
+    sizes: [500, 2000, 7000]
+  numina_orca:       # 对照：GPT-4o，orca_math 小学应用题（无标准答案，只做格式过滤）
+    dataset: numina
+    sources: [orca_math]
+    verify: none
+    sizes: [500, 2000, 10000]
+  openr1:            # 对照：DeepSeek-R1 长推理（只保留 Math-Verify 通过、推理完整且不超长的）
+    dataset: openr1
+    sources: null    # 全部来源
+    verify: math_verify_field
+    max_total_tokens: 2048   # 长推理：1024 内只剩 0.7%；2048 内约 11%（偏简单题，见报告）
+    sizes: [500, 2000, 10000]

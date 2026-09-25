@@ -1,0 +1,23 @@
+# 阶段 5-3：自蒸馏 / 拒绝采样（学生自己解 GSM8K 训练题，只保留答对的解答）
+# 题目与 gsm8k_human 臂完全相同（同一 valid、同一 train 顺序），只把"人工解答"换成"学生自己的正确解答"
+seed: 42
+model: mlx-community/Qwen2.5-1.5B-Instruct-bf16
+system_prompt: "Please reason step by step, and put your final answer within \\boxed{}."   # 与评测一致
+
+question_source: data/filtered/gsm8k_human     # 读取 valid.jsonl 和 train_7000.jsonl（保持原顺序）
+n_train_questions: 2600     # 生成的训练题数（预计 pass@4 ~90%，足够凑出 2000 道有正确解答的题）
+samples_per_question: 4
+# Qwen2.5-Instruct 官方 generation_config：temperature 0.7 / top_p 0.8 / top_k 20
+# （repetition_penalty 1.1 未启用：未确认 mlx-lm 批量生成下逐行处理正确）
+temperature: 0.7
+top_p: 0.8
+top_k: 20
+max_tokens: 1024
+batch_size: 64
+chunk_questions: 16         # 每次 16 题 × 4 采样 = 64 条，等于 batch_size，避免 KV cache padding 累积（见阶段 1）
+
+out_dir: data/generated/self_rft
+# 构建训练数据：与阶段 3 相同的格式过滤和长度上限
+train_size: 2000
+max_total_tokens: 1024
+decontam_config: configs/decontam.yaml

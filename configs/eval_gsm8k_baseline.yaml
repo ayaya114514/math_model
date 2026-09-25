@@ -1,0 +1,15 @@
+# 阶段 1：未训练学生模型的 GSM8K 基线评测
+# 后续微调模型的评测复制本文件，只改 run_name 和 adapter_path，其余保持一致
+run_name: gsm8k_baseline
+seed: 42
+
+model: mlx-community/Qwen2.5-1.5B-Instruct-bf16
+adapter_path: null          # LoRA 权重目录；基线为 null
+
+data: data/raw/gsm8k_test.jsonl
+limit: null                 # 只跑前 N 题（调试用）；null = 全部 1319 题
+
+system_prompt: "Please reason step by step, and put your final answer within \\boxed{}."
+max_tokens: 1024            # greedy 解码
+batch_size: 64              # 固定不变，保证可复现（batch 组成不同，greedy 输出会有细微差异）
+chunk_size: 64              # = batch_size：chunk 内不补新题，避免 BatchKVCache padding 累积导致 OOM（见 EXPERIMENTS.md）
