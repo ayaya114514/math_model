@@ -156,18 +156,36 @@
      **对这个学生来说，训练数据的写法是否贴近学生自己的分布，比老师是谁更重要。**
 - 局限：单 seed；self-RFT 排除了 199 道 4 次都做错的题，训练题略偏简单；自蒸馏无法教会学生原本不会的东西（lenient 没有显著提升）。
 
-## 2026-09-25 22:4x 暂停（实验 2：OpenR1 长推理对照，进行到第 1 步）
+## 2026-09-26 阶段 5-4：OpenR1 长推理对照（DeepSeek-R1，500 条 × 2 epoch）
 
-- 已完成：5-1（epoch 对照）、5-2（4 种数据来源）、5-3（自蒸馏 + lenient 复核）。
-- 进行中被暂停：**5-4 OpenR1 长推理对照**（DeepSeek-R1，500 条，序列上限 2048，评测 max_tokens 2048）
-  - 第 1 步"基线 @2048 重测"完成 128/1319 题：`results/gsm8k_baseline_2048/predictions.jsonl`（评测支持断点续跑，重新运行同一命令即可接着跑）
-  - 第 2、3 步（训练、评测）尚未开始；配置已就绪：`configs/eval_gsm8k_2048.yaml`、`configs/train_openr1_500.yaml`
-  - 注意：`train_openr1_500.yaml` 用 batch 1 × 累积 16、序列 2048，**峰值内存还没实测**，首次运行时要观察前几十步的 Peak mem
-- 恢复命令（依次执行，约 4–4.5 小时）：
-  ```
-  export PYTHONPATH=src
-  .venv/bin/python -u src/evaluate.py configs/eval_gsm8k_2048.yaml
-  .venv/bin/python -u src/train_lora.py configs/train_openr1_500.yaml && .venv/bin/python src/plot_curve.py openr1_500
-  .venv/bin/python -u src/evaluate.py configs/eval_gsm8k_2048.yaml --run-name gsm8k_openr1_500_2048 --adapter-path adapters/openr1_500
-  .venv/bin/python src/compare.py --ref gsm8k_baseline_2048 gsm8k_openr1_500_2048 && .venv/bin/python src/compare.py --ref gsm8k_baseline_2048 --metric lenient gsm8k_openr1_500_2048
-  ```
+- 配置：`configs/train_openr1_500.yaml`（序列上限 2048，batch 1 × 累积 16，等效 batch 16；其余与 omi2 相同）、`configs/eval_gsm8k_2048.yaml`（评测 max_tokens 2048，基线也用 2048 重测）
+- 数据：openr1 臂 train_500（竞赛题，保留 `<think>…</think>`，只取 ≤2048 token 的样本，本身偏简单）
+- 训练：1008 iter = 63 次参数更新，约 85 min + val 约 25 min；峰值内存 6.92 GB；val loss 0.813 → 0.570 → 0.538 → 0.535 → 0.532（第 1 个 epoch 后基本走平）。曲线 `results/openr1_500/train_curve.png`
+- 基线 @2048：strict 70.74% / lenient 74.07%，和 @1024 完全一致（截断 8 条），说明放宽 max_tokens 对基线没有影响。
+- 结果（`results/stage5/openr1.md`）：
+
+| 训练数据 | 平均输出 | strict | Δ strict（p） | lenient | Δ lenient（p） | boxed | 截断 |
+|---|---|---|---|---|---|---|---|
+| 基线 @2048 | 317 | 70.74% | — | 74.07% | — | 94.9% | 0.6% |
+| OpenR1（DeepSeek-R1）500 | 1275 | 56.33% | **−14.40pp（1e-19）** | 60.05% | **−14.03pp（8e-21）** | 72.4% | **27.7%** |
+
+- 分档（strict）：Q1 78.1→66.9，Q2 77.9→58.5，Q3 74.8→55.3，Q4 52.3→44.7；越难的题截断率越高（23% → 34%）。
+- 结论：
+  1. **长推理蒸馏在这个规模下明显伤害学生**，strict 和 lenient 都掉约 14pp，是目前最差的一组（与人工解答相当）。
+  2. **损失几乎全部来自失控的长输出**：27.7% 的输出写满 2048 token，其中 93% 是重复循环（反复 "Alternatively… let me check"），截断题的 lenient 只有 13%。
+     学生学会了 R1 的**反复自检的形式**，却没学会**何时停下**。
+  3. 在没有截断的 953 题上，openr1 strict 78.0% 对基线 75.7%，lenient 78.0% 对 79.1%，基本持平。
+     但这是有选择偏差的子集（能收住的多是它有把握的题），**不能**据此说"长推理本身有效"。
+  4. 和 5-2、5-3 一致：学生首先迁移的是老师的写法（输出 317 → 1275 token）。这次的写法（长 `<think>` + 自我反思）远离学生自己的分布，而且 63 次更新 / 500 条只够学会风格，学不会控制，所以伤害最大。
+- 局限：单 seed；只用了 500 条（阶段 3 已抽好 train_2000 可用）、63 次更新；max_tokens 2048 对 R1 风格偏紧（但训练样本本身都 ≤2048）；训练题是竞赛题，与 GSM8K 领域不同，领域差异和"长推理"两个变量没有分开。
+- 可能的后续（未做）：训练 2000 条看更多数据能否学会收尾；评测时加 repetition penalty 或更大的 max_tokens；把"答对的短 R1 样本"与"长 R1 样本"分开对照。
+
+## 2026-09-26 阶段 5 小结
+
+- 总对比表：`results/stage5/summary.md`（6 组训练数据 + 基线，strict / lenient 各自的 Δ 和 McNemar p 值）
+- 回答"什么样的蒸馏数据最有效"（对 Qwen2.5-1.5B-Instruct、GSM8K、LoRA、约 2000 条这个设置）：
+  1. **只有自蒸馏（学生自己答对的解答）有显著提升**：strict +4.0pp。但 lenient 只 +0.7pp（不显著），提升来自格式一致性，而不是推理能力。
+  2. **所有外部老师的数据都损害了推理**（lenient −3.5 到 −16.5pp）。老师越强不等于越好：Llama-405B、GPT-4o、GPT-3.5 三者之间差异不显著。
+  3. **决定好坏的主要是写法和学生自身分布的距离**：学生几乎原样学到老师的回答长度；太短（人工 96 token）和太长（R1 1489 token）两端的伤害最大，分别是推理步骤不够和收不住的重复循环。
+  4. **评测方法上的教训**：必须同时报告 strict 和 lenient，否则格式改善会掩盖推理退化；val loss 衡量的是"像不像老师"，不代表准确率。
+- 共同局限：全部单 seed；只测了 GSM8K；数据量只测了 2000（OpenR1 为 500）一个规模。
