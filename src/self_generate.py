@@ -1,7 +1,9 @@
-"""阶段 5-3：自蒸馏 / 拒绝采样（Rejection-sampling Fine-Tuning）。
+"""阶段 5-3：自蒸馏 / 拒绝采样（Rejection-sampling Fine-Tuning）；阶段 7-1 复用它做本地老师的序列级蒸馏。
 
-生成: 学生对 GSM8K 训练题（与 gsm8k_human 臂相同的题目和顺序）每题采样 k 次，写 generations.jsonl（可断点续跑）
-构建: 每题从"答对且格式合格"的采样中随机挑 1 条 -> data/filtered/self_rft/{valid,train_N}.jsonl
+生成: 配置里的 model（学生自己或本地老师）对 GSM8K 训练题（与 gsm8k_human 臂相同的题目和顺序）每题采样 k 次，
+      写 generations.jsonl（可断点续跑）
+构建: 每题从"答对且格式合格"的采样中随机挑 1 条 -> data/filtered/<arm>/{valid,train_N}.jsonl
+      长度按学生 tokenizer（student_model）计算
 
 用法:
   .venv/bin/python -u src/self_generate.py configs/self_rft.yaml generate [--limit N]
@@ -81,10 +83,11 @@ def generate(cfg, limit):
 def build(cfg):
     from transformers import AutoTokenizer
 
-    tok = AutoTokenizer.from_pretrained(cfg["model"])
+    arm = cfg.get("arm", "self_rft")
+    tok = AutoTokenizer.from_pretrained(cfg.get("student_model", cfg["model"]))  # 训练长度按学生 tokenizer 算
     dcfg = yaml.safe_load(open(cfg["decontam_config"]))
     exact, index, n_grams = build_index(load_tests(dcfg), dcfg["ngram"])
-    rng = random.Random(f"{cfg['seed']}-self_rft")
+    rng = random.Random(f"{cfg['seed']}-{arm}")
     gens = [json.loads(line) for line in open(Path(cfg["out_dir"]) / "generations.jsonl")]
     order = {q["id"]: i for i, q in enumerate(load_questions(cfg))}
     gens.sort(key=lambda g: order[g["id"]])  # 保持与 gsm8k_human 臂相同的题目顺序
@@ -123,13 +126,14 @@ def build(cfg):
         out[g["split"]].append({
             "id": g["id"], "question": g["question"], "response": s["response"].strip(),
             "final_answer": s["boxed"], "gold": g["gold"], "verified": True, "source": "gsm8k_train",
-            "dataset": "self-RFT", "teacher": "Qwen2.5-1.5B-Instruct (self, rejection-sampled)",
+            "dataset": cfg.get("dataset", "self-RFT"),
+            "teacher": cfg.get("teacher", "Qwen2.5-1.5B-Instruct (self, rejection-sampled)"),
             "prompt_tokens": p_tok, "response_tokens": r_tok,
         })
 
     n = cfg["train_size"]
     assert len(out["train"]) >= n, f"可用训练题只有 {len(out['train'])} 道，不足 {n}；请增大 n_train_questions"
-    d = Path("data/filtered/self_rft")
+    d = Path("data/filtered") / arm
     d.mkdir(parents=True, exist_ok=True)
     for name, rows in [("valid", out["valid"]), (f"train_{n}", out["train"][:n])]:
         with open(d / f"{name}.jsonl", "w") as f:
@@ -144,8 +148,9 @@ def build(cfg):
         "valid": len(out["valid"]), "train_available": len(out["train"]), "train_written": n,
         "train_response_tokens_mean": statistics.mean(r["response_tokens"] for r in out["train"][:n]),
     }
-    Path("results/stage5").mkdir(parents=True, exist_ok=True)
-    Path("results/stage5/self_rft_build.json").write_text(json.dumps(report, indent=2, ensure_ascii=False))
+    report_path = Path(cfg.get("report", "results/stage5/self_rft_build.json"))
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False))
     print(json.dumps(report, indent=2, ensure_ascii=False))
 
 

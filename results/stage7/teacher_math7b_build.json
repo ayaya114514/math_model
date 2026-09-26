@@ -1,0 +1,16 @@
+{
+  "questions": 2800,
+  "samples": 2800,
+  "sample_accuracy": 0.9592857142857143,
+  "pass_at_k_distribution": {
+    "0": 114,
+    "1": 2686
+  },
+  "drops": {
+    "no_usable_sample": 114
+  },
+  "valid": 195,
+  "train_available": 2491,
+  "train_written": 2000,
+  "train_response_tokens_mean": 290.9985
+}

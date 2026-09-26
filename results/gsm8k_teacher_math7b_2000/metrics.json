@@ -1,0 +1,25 @@
+{
+  "run_name": "gsm8k_teacher_math7b_2000",
+  "model": "mlx-community/Qwen2.5-1.5B-Instruct-bf16",
+  "adapter_path": "adapters/teacher_math7b_2000",
+  "data": "data/raw/gsm8k_test.jsonl",
+  "n": 1319,
+  "strict_acc": 0.7437452615617892,
+  "lenient_acc": 0.7437452615617892,
+  "boxed_rate": 0.9977255496588324,
+  "truncated_rate": 0.002274450341167551,
+  "mean_gen_tokens": 305.27065959059894,
+  "elapsed_s_this_session": 905.1129513749911,
+  "config": {
+    "run_name": "gsm8k_teacher_math7b_2000",
+    "seed": 42,
+    "model": "mlx-community/Qwen2.5-1.5B-Instruct-bf16",
+    "adapter_path": "adapters/teacher_math7b_2000",
+    "data": "data/raw/gsm8k_test.jsonl",
+    "limit": null,
+    "system_prompt": "Please reason step by step, and put your final answer within \\boxed{}.",
+    "max_tokens": 1024,
+    "batch_size": 64,
+    "chunk_size": 64
+  }
+}
