@@ -3,8 +3,11 @@
 - 模型答案：取回答中最后一个 \\boxed{...}（支持嵌套花括号）
 - GSM8K 标准答案：#### 之后的数字
 - 严格指标（strict）：只认 \\boxed{}；宽松指标（lenient）：没有 boxed 时取全文最后一个数字
+- MATH：答案是 LaTeX 表达式（分数、根号、区间、坐标……），用 math-verify 判等价（math_judge）
 """
 import re
+
+from math_verify import parse, verify
 
 NUM_RE = re.compile(r"-?\d+(?:\.\d+)?(?:/\d+)?")
 
@@ -90,4 +93,25 @@ def judge(response, gold_str):
         "lenient_pred": lenient_pred,
         "strict_correct": is_equal(strict_pred, gold),
         "lenient_correct": is_equal(lenient_pred, gold),
+    }
+
+
+def _mv_equal(gold, pred_text):
+    """math-verify 判等价；gold 是 LaTeX 答案，pred_text 是会被 parse 的文本。解析失败算错。"""
+    try:
+        return bool(verify(parse("\\boxed{" + gold + "}"), parse(pred_text)))
+    except Exception:
+        return False
+
+
+def math_judge(response, gold):
+    """MATH 版 judge：strict 只认最后一个 \\boxed{}；lenient 在没有 boxed 时交给 math-verify 取最后一个表达式。"""
+    boxed = extract_boxed(response)
+    strict_ok = boxed is not None and _mv_equal(gold, "\\boxed{" + boxed + "}")
+    return {
+        "boxed": boxed,
+        "pred": boxed,
+        "lenient_pred": boxed,  # 无 boxed 时由 math-verify 在全文中提取，这里不单独记录
+        "strict_correct": strict_ok,
+        "lenient_correct": strict_ok if boxed is not None else _mv_equal(gold, response),
     }

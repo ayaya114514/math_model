@@ -13,7 +13,9 @@ import mlx.core as mx
 import yaml
 from mlx_lm import batch_generate, load
 
-from answer import judge
+from answer import judge, math_judge
+
+JUDGES = {"gsm8k": judge, "math": math_judge}  # 配置里的 task -> 判分函数
 
 
 def build_prompt(tokenizer, system_prompt, question):
@@ -58,6 +60,7 @@ def main():
     if args.adapter_path is not None:
         cfg["adapter_path"] = args.adapter_path
     mx.random.seed(cfg["seed"])
+    judge_fn = JUDGES[cfg.get("task", "gsm8k")]
 
     rows = [json.loads(line) for line in open(cfg["data"])]
     assert all(r["split"] == "test" for r in rows), "评测数据必须全部来自 test split"
@@ -90,7 +93,7 @@ def main():
                         "gold": r["gold"],
                         "response": text,
                         "gen_tokens": len(tokenizer.encode(text)),
-                        **judge(text, r["gold"]),
+                        **judge_fn(text, r["gold"]),
                     }
                     done[r["id"]] = rec
                     f.write(json.dumps(rec, ensure_ascii=False) + "\n")

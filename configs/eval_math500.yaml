@@ -1,0 +1,16 @@
+# 阶段 5-5：MATH-500 评测（HuggingFaceH4/MATH-500 子集，见 src/prepare_math500.py）
+# 与 eval_gsm8k_2048.yaml 只差 task / data / run_name；微调模型用 --run-name / --adapter-path 覆盖
+run_name: math500_baseline
+seed: 42
+task: math                  # 判分用 math-verify（answer.math_judge）
+
+model: mlx-community/Qwen2.5-1.5B-Instruct-bf16
+adapter_path: null          # LoRA 权重目录；基线为 null
+
+data: data/raw/math500.jsonl
+limit: null                 # 只跑前 N 题（调试用）；null = 全部 500 题
+
+system_prompt: "Please reason step by step, and put your final answer within \\boxed{}."
+max_tokens: 2048            # MATH 推理更长，与长推理对照同一上限
+batch_size: 64              # 固定不变，保证可复现（batch 组成不同，greedy 输出会有细微差异）
+chunk_size: 64              # = batch_size：chunk 内不补新题，避免 BatchKVCache padding 累积导致 OOM（见 EXPERIMENTS.md）

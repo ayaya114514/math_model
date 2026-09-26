@@ -1,4 +1,4 @@
-# 阶段 5 总对比表（GSM8K test 1319 题，学生 Qwen2.5-1.5B-Instruct，LoRA rank 16，2 epoch，单 seed）
+# 阶段 5 总对比表（GSM8K test 1319 题 + MATH-500，学生 Qwen2.5-1.5B-Instruct，LoRA rank 16，2 epoch，单 seed）
 
 p 值为相对基线的精确 McNemar 配对检验（双侧）。OpenR1 一行的参照是 `gsm8k_baseline_2048`（评测 max_tokens 2048），其余行的参照是 `gsm8k_baseline`（1024）；两个基线的 strict / lenient 完全相同。
 
@@ -14,4 +14,16 @@ p 值为相对基线的精确 McNemar 配对检验（双侧）。OpenR1 一行�
 
 补充：OMI2 训练 1 个 epoch（iter1000）strict 67.02%（−3.71pp，p=0.008），比 2 epoch 低 3.5pp（见 `epochs.md`）。
 
-明细：`epochs.md`（5-1）、`sources.md`（5-2）、`all_strict.md` / `all_lenient.md`（5-3）、`openr1.md`（5-4）。
+## MATH-500（阶段 5-5，同一批模型，max_tokens 2048，math-verify 判分）
+
+| 训练数据（老师） | 学生输出均值 | strict | Δ strict（p） | lenient | Δ lenient（p） | 截断 |
+|---|---|---|---|---|---|---|
+| 基线（不训练） | 634 | 54.80% | — | 55.20% | — | 6.2% |
+| 自蒸馏 self-RFT | 648 | 53.20% | −1.60pp（0.46） | 53.40% | −1.80pp（0.39） | 5.2% |
+| NuminaMath orca（GPT-4o） | 515 | 45.00% | −9.80pp（8e-6） | 45.80% | −9.40pp（1e-5） | 4.8% |
+| OMI2（Llama-3.1-405B） | 525 | 42.20% | −12.60pp（3e-8） | 42.80% | −12.40pp（5e-8） | 13.2% |
+| MetaMathQA（GPT-3.5） | 334 | 37.00% | −17.80pp（5e-16） | 37.00% | −18.20pp（5e-17） | 5.6% |
+| GSM8K 人工解答 | 281 | 36.00% | −18.80pp（9e-15） | 36.20% | −19.00pp（3e-15） | 6.2% |
+| OpenR1（DeepSeek-R1，长推理） | 1757 | 27.40% | −27.40pp（1e-29） | 32.80% | −22.40pp（9e-21） | 59.2% |
+
+明细：`epochs.md`（5-1）、`sources.md`（5-2）、`all_strict.md` / `all_lenient.md`（5-3）、`openr1.md`（5-4）、`math500.md`（5-5）。

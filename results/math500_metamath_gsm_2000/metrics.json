@@ -1,0 +1,26 @@
+{
+  "run_name": "math500_metamath_gsm_2000",
+  "model": "mlx-community/Qwen2.5-1.5B-Instruct-bf16",
+  "adapter_path": "adapters/metamath_gsm_2000",
+  "data": "data/raw/math500.jsonl",
+  "n": 500,
+  "strict_acc": 0.37,
+  "lenient_acc": 0.37,
+  "boxed_rate": 0.944,
+  "truncated_rate": 0.056,
+  "mean_gen_tokens": 334.26,
+  "elapsed_s_this_session": 711.4594769579999,
+  "config": {
+    "run_name": "math500_metamath_gsm_2000",
+    "seed": 42,
+    "task": "math",
+    "model": "mlx-community/Qwen2.5-1.5B-Instruct-bf16",
+    "adapter_path": "adapters/metamath_gsm_2000",
+    "data": "data/raw/math500.jsonl",
+    "limit": null,
+    "system_prompt": "Please reason step by step, and put your final answer within \\boxed{}.",
+    "max_tokens": 2048,
+    "batch_size": 64,
+    "chunk_size": 64
+  }
+}
